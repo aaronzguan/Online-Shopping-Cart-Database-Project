@@ -82,7 +82,7 @@ public class addressFrame extends JPanel
 			return data.length;
 		}
 
-		public Object getValueAt(int rowIndex, int columnIndex) {
+pr		public Object getValueAt(int rowIndex, int columnIndex) {
 			return data[rowIndex][columnIndex];
 		}
 		
@@ -99,15 +99,15 @@ public class addressFrame extends JPanel
 				 data = new Object[rs.getFetchSize()][4];
 				 while(rs.next())
 				 {
-					 data[count][0] = rs.getString(1);//product name
-					    data[count][1] = rs.getString(2);	//last added date 
-					    data[count][2] = rs.getInt(3);	 // quantity
-					    data[count][3] = new Boolean(false);
+					 data[count][0] = rs.getString(1);//name
+					    data[count][1] = rs.getString(2);	//province
+					    data[count][2] = rs.getInt(3);	//street address 
+					    data[count][3] = new Boolean(false);//checkbox
 					    count++;
 				 }
 			 }
 			 return data;
-		 }
+		 }}
 	}
 	
 	public  void createUI(int id, SQL sqlo) throws SQLException

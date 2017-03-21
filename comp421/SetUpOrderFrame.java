@@ -102,9 +102,9 @@ public class SetUpOrderFrame extends JPanel{
 		  data = new Object[rs.getFetchSize()][4];
 		while(rs.next())
 		{
-		    data[count][0] = rs.getString(1);//product name
-		    data[count][1] = rs.getString(2);	//last added date 
-		    data[count][2] = rs.getInt(3);	 // quantity
+		    data[count][0] = rs.getString(1);
+		    data[count][1] = rs.getString(2);	 
+		    data[count][2] = rs.getInt(3);	
 		    data[count][3] = new Boolean(true);
 		    count++;
 		}

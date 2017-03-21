@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.*;
+
+
+//sql operation in button submit to be implemented 
 public class SearchFrame extends JFrame{
 	
 	JButton submitButton = new JButton("Submit");
@@ -14,14 +17,16 @@ public class SearchFrame extends JFrame{
 	JTextField typeTF = new JTextField();
 	JTextField ModuleNumTF = new JTextField();
 	JTextField BrandTF = new JTextField();
-	
+	SearchFrame frame = this;
 	int userid; 
 	SQL sql;
+	MainFrame mainFrame;
 	
-	public SearchFrame(int id,SQL sqlo)
+	public SearchFrame(int id,SQL sqlo,MainFrame mainFrame)
 	{
 		userid = id;
 		sql = sqlo;
+		this.mainFrame = mainFrame;
 		
 		Panel titlePanel = new Panel();
 		Panel searchContentPanel = new Panel();
@@ -44,9 +49,9 @@ public class SearchFrame extends JFrame{
 		this.add(searchContentPanel, BorderLayout.CENTER);
 		   // button panel 
 	    buttonPanel.setLayout(new GridLayout(1,2,25,25));	
-	    SearchListener listener = new SearchListener(id,sqlo);
+	    SearchListener listener = new SearchListener();
 	    submitButton.addActionListener(listener);
-	    submitButton.addActionListener(listener);
+	    backButton.addActionListener(listener);
 		buttonPanel.add(submitButton);
 		buttonPanel.add(backButton);
 	    this.add(buttonPanel, BorderLayout.SOUTH);
@@ -54,45 +59,53 @@ public class SearchFrame extends JFrame{
 	
 	
 	
-	   static public void invoke(int id, SQL sql)
+	   private void setUpNewUI(int id, SQL sql,MainFrame mainFrame)
 	    {
 	        
-	        SearchFrame frame = new SearchFrame(id,sql);
+	        SearchFrame frame = new SearchFrame(id,sql,mainFrame);
 	        
 	        frame.setTitle("C2C Online Electronic Shop");
 	        frame.setLocationRelativeTo(null);
-	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	        frame.setSize(500, 400);
 	       frame.setVisible(true);
 	       // frame.pack();
 	    }
+	   
+	   static public void invoke(int id, SQL sql, MainFrame mainFrame)
+	   {
+		   SearchFrame frame = new SearchFrame(id,sql,mainFrame);
+		   frame.setUpNewUI(id,sql,mainFrame);
+	   }
 	    
 	   
 	   public class SearchListener implements ActionListener{
 		    
-			int userid;
-			SQL sql = null;
-			public SearchListener(int id,SQL sqlo)
-			{
-				userid = id;
-				sql = sqlo;
-				
-			}
-			
+
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				// TODO Auto-generated method stub
-			     if(event.getSource() ==  submitButton)
+				// System.out.println("Back Button clicked ");
+				if(event.getSource() ==  submitButton)
 			    	 {
 			    	 // to be implemented 
-			    	 String sqlCode = "";
-			    	 
-			    	 
+			    	 String sqlCode = ""; 
 			    	  java.sql.ResultSet rs = sql.QueryExchte(sqlCode);
+			    	  
+			    	  try {
+						SaveToCartFrame.invoke(userid, sql, rs, frame);
+						frame.setVisible(false);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			    	  //open SaveToCartFrame with rs, sql, and userid 
 			    	 }
-			     else
+			     else if (event.getSource() == backButton)
 			     {
+			    	 //System.out.println("Back Button clicked ");
+			    	 mainFrame.setVisible(true);
+			    	 frame.setVisible(false);
 			    	 //close and invoke original one 
 			    	 //to be implemented 
 			     

@@ -9,21 +9,24 @@ import javax.swing.table.*;
 
 
 
-
-
+//need to add button back -done 
+//sql code to be implemented in button editor 
 public class SaveToCartFrame extends JPanel {
 	
 	int userid; 
 	SQL sql;
 	java.sql.ResultSet rs = null;
 	JTable table = null;
-	//JButton[] buttonArray = null;
-     public SaveToCartFrame(int id,SQL sqlo,java.sql.ResultSet rs) throws SQLException{
+	JButton backButton = new JButton("Back");
+	SearchFrame searchFrame = null;
+	
+     public SaveToCartFrame(int id,SQL sqlo,java.sql.ResultSet rs,SearchFrame searchFrame) throws SQLException{
     	 super(new GridLayout(1,0));
     	
     	 userid = id;
     	 sql = sqlo;
     	 this.rs = rs;
+    	 this.searchFrame = searchFrame;
     	
     	 table = new JTable(new goodsTableModule());
     	 table.setPreferredSize(new Dimension(500,70));
@@ -203,21 +206,46 @@ public class SaveToCartFrame extends JPanel {
    	 
      }
 
-	public static void createUI(int id, SQL sqlo,java.sql.ResultSet rs) throws SQLException
+	private void createUI(int id, SQL sqlo,java.sql.ResultSet rs) throws SQLException
 	{
 		JFrame frame = new JFrame("TableRenderDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
  
-        //Create and set up the content pane.
+        /*//Create and set up the content pane.
         SaveToCartFrame newContentPane = new SaveToCartFrame(id, sqlo,rs);
         newContentPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(newContentPane);
- 
+ */
+        JPanel titlePanel = new JPanel(new GridLayout(1,0));
+        titlePanel.add(new JLabel("Slelect products to build order"));
+        JPanel buttonPanel = new JPanel(new GridLayout(1,0));
+        
+        backButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				searchFrame.setVisible(true);
+				frame.dispose();
+				//other implements on close 
+			}
+        });
+        backButton.setBounds(0, 0, 50, 20);
+        buttonPanel.add(backButton);
+        
+        frame.add(titlePanel);
+        frame.add(this);
+        frame.add(buttonPanel);
+        
         //Display the window.
         frame.pack();
         frame.setVisible(true);
 	}
 	
+	public static void invoke(int id,SQL sql, java.sql.ResultSet rs,SearchFrame searchFrame) throws SQLException
+	{
+		SaveToCartFrame frame = new SaveToCartFrame(id,sql,rs,searchFrame);
+		frame.createUI(id, sql, rs);
+	}
 	
 	
 	

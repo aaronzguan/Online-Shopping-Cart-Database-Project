@@ -8,7 +8,7 @@ import java.util.*;
 import javax.swing.table.*;
 
 import comp421.SaveToCartFrame.goodsTableModule;
-
+// sql code to be implemented in submitButton 
 
 public class SetUpOrderFrame extends JPanel{
 	
@@ -19,17 +19,17 @@ public class SetUpOrderFrame extends JPanel{
 	JTable table = null;
 	JButton submitButton = new JButton("Submit");
 	JButton backButton = new JButton("Back");
-	
+	MainFrame mainFrame;
 	java.sql.ResultSet rs = null;
-	
-	public SetUpOrderFrame(int id,SQL sql) throws SQLException
+	SetUpOrderFrame frame = this;
+	public SetUpOrderFrame(int id,SQL sql,MainFrame mainFrame) throws SQLException
 	{
 	 userid = id;
 	 this.sql = sql;
      String sqlCode = "";
      rs = sql.QueryExchte(sqlCode);
      table = new JTable(new OrderModule());
-	
+	  this.mainFrame = mainFrame;
      JScrollPane scrollPane = new JScrollPane(table);
      initColumnSizes(table);
 	 add(scrollPane);
@@ -132,13 +132,13 @@ public class SetUpOrderFrame extends JPanel{
 	    buttonPanel.add(backButton);
 		
 		JFrame frame = new JFrame("TableRenderDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
  
         //Create and set up the content pane.
-        SetUpOrderFrame tablePanel = new SetUpOrderFrame(id,sqlo);
+        //SetUpOrderFrame tablePanel = new SetUpOrderFrame(id,sqlo,mainFrame);
         
         frame.add(titlePanel,BorderLayout.NORTH);
-        frame.add(tablePanel,BorderLayout.CENTER);
+        frame.add(this,BorderLayout.CENTER);
         frame.add(buttonPanel,BorderLayout.SOUTH);
         //Display the window.
         frame.pack();
@@ -147,9 +147,9 @@ public class SetUpOrderFrame extends JPanel{
 	
 	
 	
-	static public void invoke(int id, SQL sql) throws SQLException
+	static public void invoke(int id, SQL sql,MainFrame mainFrame) throws SQLException
 	{
-		SetUpOrderFrame frame = new SetUpOrderFrame(id,sql);
+		SetUpOrderFrame frame = new SetUpOrderFrame(id,sql,mainFrame);
 		frame.createUI(id, sql);
 	}
 	
@@ -171,7 +171,8 @@ public class SetUpOrderFrame extends JPanel{
 		}
 		else if(event.getSource() == backButton)
 		{
-			
+			 mainFrame.setVisible(true);
+	    	 frame.setVisible(false);
 		}
 		
 		

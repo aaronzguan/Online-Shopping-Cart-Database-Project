@@ -11,15 +11,15 @@ public class MainFrame extends JFrame{
 	JButton registerButton = new JButton("Register");
 	JButton searchProductButton = new JButton ("Search Product");
 	JButton buyButton = new JButton ("View Shopping Cart and Purchase");
-	JButton AddAddressButton = new JButton("Add a new Address");
+	JButton addAddressButton = new JButton("Add a new Address");
 	JButton QuitButton = new JButton("Quit");
-	
+	MainFrame mainFrame = this;
 	SQL sql = null;
 	int userid;
 	public MainFrame() throws SQLException
 	{
 		// run initial the sql, build connection 
-		// sql = new SQL();
+		sql = new SQL();
 		 userid = 0;
 		// button panel for frame
 		 JPanel mainArc  = new JPanel();
@@ -32,14 +32,21 @@ public class MainFrame extends JFrame{
 	    mainArc.add(loginButton);
 	    registerButton.addActionListener(listener);
 		mainArc.add(registerButton);
+		
+		addAddressButton.addActionListener(listener);
+        addAddressButton.setEnabled(false);
+		mainArc.add(addAddressButton);
 		searchProductButton.addActionListener(listener);
+		searchProductButton.setEnabled(true);
 		mainArc.add(searchProductButton);
 		buyButton.addActionListener(listener);
+		buyButton.setEnabled(false);
 		mainArc.add(buyButton);
-		AddAddressButton.addActionListener(listener);
-		mainArc.add(AddAddressButton);
+		
 		QuitButton.addActionListener(listener);
 	    mainArc.add(QuitButton); 
+	    
+	    
 	    
 	    this.add(mainArc,BorderLayout.WEST);
 		
@@ -49,6 +56,17 @@ public class MainFrame extends JFrame{
 	{
 		userid = id;
 	}
+	
+	public void setAddAddressButtonEnable(boolean b)
+	{
+		addAddressButton.setEnabled(b);
+	}
+	public void setSearchAndBuyButtonEnable(boolean b)
+	{
+		searchProductButton.setEnabled(b);
+		buyButton.setEnabled(b);
+	}
+	
 	
 	  public static void main(String[] args) throws Exception
 	    {
@@ -64,7 +82,9 @@ public class MainFrame extends JFrame{
 	       frame.setVisible(true);
 	       // frame.pack();
 	    }
-	 
+      
+	  
+	  
 	 
 	 public class MainButtonListener implements ActionListener {
 
@@ -77,45 +97,48 @@ public class MainFrame extends JFrame{
 			    userid = 0;
 			}
 			
-			JButton loginButton = new JButton("Login");
-			JButton registerButton = new JButton("Register");
-			
-			JButton buyButton = new JButton ("View Shopping Cart and Purchase");
-			JButton AddAddressButton = new JButton("Add a new Address");
-			JButton QuitButton = new JButton("Quit");
-			
-			
-			
 			
 			public void actionPerformed(ActionEvent event ) {
 				
 				if(event.getSource() == loginButton)
 				{
-				  
+					//mainFrame to be passed 
+				  Login.invoke(sql,mainFrame);
+				  mainFrame.setVisible(false);
 				}
 				else if(event.getSource() == registerButton)
 				{
-					
+					//mainFrame to be passed 
+					Register.invoke(sql,mainFrame);
+					mainFrame.setVisible(false);
 				}
-				else if (event.getSource() == AddAddressButton)
+				else if (event.getSource() == addAddressButton)
 				{
-					
+					//mainFrame to be passed 
+					AddAddress.invoke(userid,sql,mainFrame);
+					mainFrame.setVisible(false);
 				}
 				else if (event.getSource() == searchProductButton)
 				{
-					SearchFrame.invoke(userid, sql);
+					//done 
+					mainFrame.setVisible(false);
+					SearchFrame.invoke(userid,sql,mainFrame);
+					
 					
 				}
 				else if(event.getSource() == buyButton)
 				{
+				//done 
 					try {
-						SetUpOrderFrame.invoke(userid, sql);
+						SetUpOrderFrame.invoke(userid, sql,mainFrame);
+						mainFrame.setVisible(false);
 					} catch (SQLException e) {
 					}
 				}
 				else if(event.getSource() == QuitButton)
 				{
-					
+                    //done 
+					System.exit(0);
 				}
 			
 					

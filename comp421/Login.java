@@ -6,8 +6,8 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 
 public class Login extends JFrame{
-	JTextField userid = new JTextField ("user id");
-	JTextField phonenumber = new JTextField("Phone number");
+	JTextField userid = new JTextField ("");
+	JTextField phonenumber = new JTextField("");
 	JButton login = new JButton("Log in");
 	
 	SQL loginsql;

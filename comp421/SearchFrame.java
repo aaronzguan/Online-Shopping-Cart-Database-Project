@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-//sql operation in button submit to be implemented 
+//sql operation in button submit to be implemented  --done
+
+
 public class SearchFrame extends JFrame{
 	
 	JButton submitButton = new JButton("Submit");
@@ -89,7 +91,51 @@ public class SearchFrame extends JFrame{
 				if(event.getSource() ==  submitButton)
 			    	 {
 			    	 // to be implemented 
-			    	 String sqlCode = ""; 
+					String name = nameTF.getText().trim();
+				    String type = typeTF.getText().trim();
+				    String modelNum = ModuleNumTF.getText().trim();
+				    String brand = BrandTF.getText().trim();
+				    String sqlCode = ""; 
+				    
+				    /* select *
+				    from product
+				    where name = name and type = type and modelNumber = modelNumber and brand = brand;
+					*/
+				    
+				    sqlCode += "select * from product";
+					int notBlank = 0;
+					if((name != "") || ( type != "") ||(modelNum != "")|| (brand!= ""))		  
+					   sqlCode += "where";
+				     
+					if(name != "")
+					{
+						notBlank = 1;
+						sqlCode += "name = "+name;
+					}
+					if(type!= "")
+					{
+						if(notBlank == 1)
+							sqlCode += " And ";
+						else 
+							notBlank = 1;
+						sqlCode += "type = "+type;
+					}
+					if(modelNum != "")
+					{
+						if(notBlank == 1)
+							sqlCode += " And ";
+						else 
+							notBlank = 1;
+						sqlCode += "modelNumber ="+ modelNum;
+					}
+					if(brand != "")
+					{
+						if(notBlank ==1)
+							sqlCode += " And ";
+						sqlCode += "brand = "+brand;
+					}
+					sqlCode+= ";";   
+					  System.out.println(sqlCode);
 			    	  java.sql.ResultSet rs = sql.QueryExchte(sqlCode);
 			    	  
 			    	  try {

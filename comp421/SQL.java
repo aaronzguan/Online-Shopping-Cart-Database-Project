@@ -21,8 +21,8 @@ public class SQL {
 	
 		String url = "jdbc:postgresql://comp421.cs.mcgill.ca:5432/cs421";
 		Connection con = DriverManager.getConnection (url, "cs421g27", "Mcgill1234") ;
-	    statement = con.createStatement ( ) ;
-
+	    statement = con.createStatement (ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE ) ;
+      // pointer move availible 
 		
 	 }
 		

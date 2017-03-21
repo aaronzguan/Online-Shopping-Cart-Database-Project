@@ -19,7 +19,7 @@ public class MainFrame extends JFrame{
 	public MainFrame() throws SQLException
 	{
 		// run initial the sql, build connection 
-		sql = new SQL();
+		//sql = new SQL();
 		 userid = 0;
 		// button panel for frame
 		 JPanel mainArc  = new JPanel();
@@ -34,13 +34,13 @@ public class MainFrame extends JFrame{
 		mainArc.add(registerButton);
 		
 		addAddressButton.addActionListener(listener);
-        addAddressButton.setEnabled(false);
+        addAddressButton.setEnabled(true);
 		mainArc.add(addAddressButton);
 		searchProductButton.addActionListener(listener);
 		searchProductButton.setEnabled(true);
 		mainArc.add(searchProductButton);
 		buyButton.addActionListener(listener);
-		buyButton.setEnabled(false);
+		buyButton.setEnabled(true);
 		mainArc.add(buyButton);
 		
 		QuitButton.addActionListener(listener);

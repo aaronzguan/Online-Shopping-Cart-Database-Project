@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.table.*;
 
@@ -15,18 +16,25 @@ public class SetUpOrderFrame extends JPanel{
 	int userid;
 	SQL sql;
 	Object[][] data = null;
-	
+	int[] pid = null;
+	int[] price = null;
 	JTable table = null;
 	JButton submitButton = new JButton("Submit");
 	JButton backButton = new JButton("Back");
 	MainFrame mainFrame;
 	java.sql.ResultSet rs = null;
-	SetUpOrderFrame frame = this;
+	JFrame frame = null;
 	public SetUpOrderFrame(int id,SQL sql,MainFrame mainFrame) throws SQLException
 	{
 	 userid = id;
 	 this.sql = sql;
-     String sqlCode = "";
+	 //to be implemented , select from Save_To_Cart 
+	 /*
+	  *select P.name,O.addTime,O.quantity,P.id
+      * from  OrderItem O,Product P 
+       where O.pid = P.pid and userid = userid  	
+	  */
+     String sqlCode = "select P.name, O.addTime, O.quantity, P.id, P.price from OrderItem O, Product P where O.pid = P.pid and userid = "+ userid + ";";
      rs = sql.QueryExchte(sqlCode);
      table = new JTable(new OrderModule());
 	  this.mainFrame = mainFrame;
@@ -60,11 +68,24 @@ public class SetUpOrderFrame extends JPanel{
 	    	 
 	     }
 	}
-		
-	
+			
+	 private int getSize(java.sql.ResultSet resultSet)
+	    {
+	    	int rowCount = 0;
+	        try {
+	            resultSet.last();
+	            rowCount = resultSet.getRow();
+	            resultSet.first();
+	        } catch (Exception e) {
+	            // TODO: handle exception
+	            e.printStackTrace();
+	        }
+	        return rowCount;
+	    }
+	 
 	public class OrderModule extends AbstractTableModel
 	{
-		String[] columnName = {"ProductÂ¡Â¡Name","Added Time","Quantity","Selcted"};
+		String[] columnName = {"Product¡¡Name","Added Time","Quantity","Selcted"};
 		Object [][] data = null;
 		Object[] longValue = {"DELL Ultra HD 4k Monitor P2715Q 27-Inch Screen LED-Lit Monitor","2017-02-21","100",new Boolean(true)};
 		
@@ -99,13 +120,18 @@ public class SetUpOrderFrame extends JPanel{
 		Object[][] data = null;
 		if(rs != null)
 		{
-		  data = new Object[rs.getFetchSize()][4];
-		while(rs.next())
+		  data = new Object[getSize(rs)][4];
+		  pid = new int[getSize(rs)];
+		  price = new int[getSize(rs)];
+		  
+		  while(rs.next())
 		{
-		    data[count][0] = rs.getString(1);
-		    data[count][1] = rs.getString(2);	 
-		    data[count][2] = rs.getInt(3);	
+		    data[count][0] = rs.getString(1);//product name
+		    data[count][1] = rs.getString(2);	//last added date 
+		    data[count][2] = rs.getInt(3);	 // quantity
 		    data[count][3] = new Boolean(true);
+		    pid[count] = rs.getInt(4);
+		    price[count] = rs.getInt(5);
 		    count++;
 		}
 		}	
@@ -113,10 +139,6 @@ public class SetUpOrderFrame extends JPanel{
 	}
 	
 	} 
-	
-	
-    	
-	
 	
 	public  void createUI(int id, SQL sqlo) throws SQLException
 	{
@@ -136,7 +158,7 @@ public class SetUpOrderFrame extends JPanel{
  
         //Create and set up the content pane.
         //SetUpOrderFrame tablePanel = new SetUpOrderFrame(id,sqlo,mainFrame);
-        
+        this.frame = frame;
         frame.add(titlePanel,BorderLayout.NORTH);
         frame.add(this,BorderLayout.CENTER);
         frame.add(buttonPanel,BorderLayout.SOUTH);
@@ -146,36 +168,139 @@ public class SetUpOrderFrame extends JPanel{
 	}
 	
 	
-	
 	static public void invoke(int id, SQL sql,MainFrame mainFrame) throws SQLException
 	{
 		SetUpOrderFrame frame = new SetUpOrderFrame(id,sql,mainFrame);
 		frame.createUI(id, sql);
 	}
-	
-	
+		
 	private class Listener implements ActionListener
 	{
 		
-	
-
 	@Override
 	public void actionPerformed(ActionEvent event){
 		
 		if (event.getSource() == submitButton)
 		{
+			// first, insert a new order without total amount 
+			//get current order number 
+			String sqlCode = "select max(orderNumber) from Orders;";			
+			java.sql.ResultSet result = sql.QueryExchte(sqlCode);
 		    int orderId = 0;
-		    //pass the order id 
-		
-		
+		    try {
+				result.next();
+			    orderId = result.getInt(1);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    orderId++;
+		    /*insert into Orders(orderNumber, creationTime)
+             *values(new_orderNumber, creationTime);
+             */
+		    sqlCode = "insert into Orders(orderNumber, creationTime) values(";
+		    sqlCode+= orderId+", ";
+		    Date d = new Date();
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		    sqlCode += sdf.format(d)+");";
+		    sql.WriteExcute(sqlCode);
+			
+			// insert order Items
+		    // get order Item itemId
+			sqlCode = "select max(itemid) from OrderItem;";
+			result = sql.QueryExchte(sqlCode);
+			int totalNum = table.getRowCount();
+			int itemId = 0;
+			try {
+					result.next();
+				    itemId = result.getInt(1);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			itemId++;// first id to be added 
+			
+			int count = 0;
+			int totalAmount = 0;
+			for(int i =0; i<totalNum;i++)
+			{
+				if((boolean)table.getValueAt(i,3))
+				{
+					/*insert into OrderItem
+                     *values(new_itemid, pid, price, creationtime);
+                     */
+					sqlCode = "insert into OrderItem values(";
+					sqlCode += (itemId+count) + ", ";
+					sqlCode += pid[i]+", ";
+					sqlCode += price[i]+", ";
+                     sqlCode += sdf.format(d)+ ");";
+                  //   System.out.print(sqlCode);
+                     sql.WriteExcute(sqlCode);
+                     totalAmount+= price[i];
+                     
+                     //build contain with such orderitem 
+                     
+                    /* insert into Contain
+                     values(new_orderNumber, itemid, quantity);
+                    */
+                     sqlCode = "insert into Contain values (";
+                     sqlCode += orderId +", ";
+                     sqlCode += (itemId + count)+", ";
+                     sqlCode += table.getValueAt(i,2)+");";
+                    // System.out.print(sqlCode);
+                     sql.WriteExcute(sqlCode);
+                     count++;
+				}	     
+			}
+			// add orderitem and contain end
+			 // add total amount 
+			/*insert into Orders(totalAmount)
+			 *values(totalAmount);
+			 */
+			sqlCode = "insert into Orders(totalAmount,paymentState) values("+totalAmount+", "+"Paid"+");";			
+		    sql.WriteExcute(sqlCode);
+		    
+		    //add payment
+		    //get credit card number 
+		    String cardNumber = "";
+		    sqlCode ="select cardNumber from CreditCard where userid = "+userid +";";
+		    result = sql.QueryExchte(sqlCode);
+		    try {
+				result.next();
+				cardNumber = result.getString(1);
+				result = null;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    //insert payment 
+		    /*insert into Payment
+             * values(orderNumber, creditcardNumber, payTime);*/
+		    sqlCode = "insert into Payment values(";
+		    sqlCode += orderId+", ";
+		    sqlCode += cardNumber +", ";
+		    sqlCode += sdf.format(d)+");";
+		    sql.WriteExcute(sqlCode);
+		    //all sql done 
+		    
+		    try {
+				addressFrame.invoke(userid, sql,orderId, mainFrame);
+		        
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+		    frame.dispose();    
+		    
 		}
 		else if(event.getSource() == backButton)
 		{
 			 mainFrame.setVisible(true);
-	    	 frame.setVisible(false);
+	    	 frame.dispose();
 		}
-		
-		
+				
 		// to be implemented
 		// pass the order id 
 	}

@@ -4,13 +4,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.table.*;
 
 
 
 //need to add button back -done 
-//sql code to be implemented in button editor 
+//sql code to be implemented in button editor -done
 public class SaveToCartFrame extends JPanel {
 	
 	int userid; 
@@ -83,10 +84,31 @@ public class SaveToCartFrame extends JPanel {
                   {
                    
                       int row = table.getSelectedRow();
-                      String sqlCode = "";
-                      sql.WriteExcute(sqlCode);
-                      //to be implemented 
+                     
+                      /*insert into Save_To_Shopping_Cart
+                      values(userid, pid, addTime, quantity);*/
+                        
+                      String code = "select quantity from Save_To_Shopping_Cart Where userid = "+userid+" and pid = "+table.getValueAt(row, 0)+";";
+                      java.sql.ResultSet result = sql.QueryExchte(code);
                     
+                      String sqlCode = "";
+                      sqlCode += "insert into Save_To_Shopping_Cart values(";
+                      sqlCode += userid + ", ";
+                      sqlCode += table.getValueAt(row, 0)+", ";
+                      Date d = new Date();  
+                      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                      sqlCode += sdf.format(d)+ ", ";
+                      if(getSize(result)==0)
+                    	  sqlCode += "1);";
+					else
+						try {
+							sqlCode += (result.getInt(1)+1)+");";
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                      sql.WriteExcute(sqlCode);
+     
                   }
               });
    
@@ -111,6 +133,19 @@ public class SaveToCartFrame extends JPanel {
 		
      }
 
+    private int getSize(java.sql.ResultSet resultSet)
+    {
+    	int rowCount = 0;
+        try {
+            resultSet.last();
+            rowCount = resultSet.getRow();
+            resultSet.first();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return rowCount;
+    }
 
 	private void initColumnSizes(JTable table) {
 	     goodsTableModule model = (goodsTableModule)table.getModel();
@@ -180,7 +215,7 @@ public class SaveToCartFrame extends JPanel {
 			Object[][] data  = null;
 			if(rs != null)
 			{
-			   data = new Object[rs.getFetchSize()][9];
+			   data = new Object[getSize(rs)][9];
 			while(rs.next())
 			{
 			    data[count][0] = rs.getInt(1);

@@ -110,7 +110,7 @@ public class SetUpOrderFrame extends JPanel{
 		}
 		}	
 		return data;
-	}}
+	}
 	
 	} 
 	

@@ -86,6 +86,8 @@ public class SearchFrame extends JFrame{
 			    	 {
 			    	 // to be implemented 
 			    	 String sqlCode = "";
+			    	 
+			    	 
 			    	  java.sql.ResultSet rs = sql.QueryExchte(sqlCode);
 			    	  //open SaveToCartFrame with rs, sql, and userid 
 			    	 }

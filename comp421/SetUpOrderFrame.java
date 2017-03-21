@@ -18,7 +18,7 @@ public class SetUpOrderFrame extends JPanel{
 	
 	JTable table = null;
 	JButton submitButton = new JButton("Submit");
-	JButton BackButton = new JButton("Back");
+	JButton backButton = new JButton("Back");
 	
 	java.sql.ResultSet rs = null;
 	
@@ -127,9 +127,9 @@ public class SetUpOrderFrame extends JPanel{
 		JPanel buttonPanel = new JPanel(new GridLayout(1,2,25,25));
 	    Listener listener = new Listener();
 		submitButton.addActionListener(listener);
-		BackButton.addActionListener(listener);
+		backButton.addActionListener(listener);
 	    buttonPanel.add(submitButton);
-	    buttonPanel.add(BackButton);
+	    buttonPanel.add(backButton);
 		
 		JFrame frame = new JFrame("TableRenderDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -146,6 +146,14 @@ public class SetUpOrderFrame extends JPanel{
 	}
 	
 	
+	
+	static public void invoke(int id, SQL sql) throws SQLException
+	{
+		SetUpOrderFrame frame = new SetUpOrderFrame(id,sql);
+		frame.createUI(id, sql);
+	}
+	
+	
 	private class Listener implements ActionListener
 	{
 		
@@ -153,6 +161,19 @@ public class SetUpOrderFrame extends JPanel{
 
 	@Override
 	public void actionPerformed(ActionEvent event){
+		
+		if (event.getSource() == submitButton)
+		{
+		    int orderId = 0;
+		    //pass the order id 
+		
+		
+		}
+		else if(event.getSource() == backButton)
+		{
+			
+		}
+		
 		
 		// to be implemented
 		// pass the order id 

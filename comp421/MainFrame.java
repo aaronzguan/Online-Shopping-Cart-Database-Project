@@ -19,7 +19,7 @@ public class MainFrame extends JFrame{
 	public MainFrame() throws SQLException
 	{
 		// run initial the sql, build connection 
-		 sql = new SQL();
+		// sql = new SQL();
 		 userid = 0;
 		// button panel for frame
 		 JPanel mainArc  = new JPanel();
@@ -76,9 +76,49 @@ public class MainFrame extends JFrame{
 			    sql = sqlpassed;	
 			    userid = 0;
 			}
-			public void actionPerformed(ActionEvent arg0) {
-				//Te be implemented 
+			
+			JButton loginButton = new JButton("Login");
+			JButton registerButton = new JButton("Register");
+			
+			JButton buyButton = new JButton ("View Shopping Cart and Purchase");
+			JButton AddAddressButton = new JButton("Add a new Address");
+			JButton QuitButton = new JButton("Quit");
+			
+			
+			
+			
+			public void actionPerformed(ActionEvent event ) {
 				
+				if(event.getSource() == loginButton)
+				{
+				  
+				}
+				else if(event.getSource() == registerButton)
+				{
+					
+				}
+				else if (event.getSource() == AddAddressButton)
+				{
+					
+				}
+				else if (event.getSource() == searchProductButton)
+				{
+					SearchFrame.invoke(userid, sql);
+					
+				}
+				else if(event.getSource() == buyButton)
+				{
+					try {
+						SetUpOrderFrame.invoke(userid, sql);
+					} catch (SQLException e) {
+					}
+				}
+				else if(event.getSource() == QuitButton)
+				{
+					
+				}
+			
+					
 			}
 
 		}

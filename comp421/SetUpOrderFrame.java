@@ -64,7 +64,7 @@ public class SetUpOrderFrame extends JPanel{
 	
 	public class OrderModule extends AbstractTableModel
 	{
-		String[] columnName = {"Product¡¡Name","Added Time","Quantity","Selcted"};
+		String[] columnName = {"ProductÂ¡Â¡Name","Added Time","Quantity","Selcted"};
 		Object [][] data = null;
 		Object[] longValue = {"DELL Ultra HD 4k Monitor P2715Q 27-Inch Screen LED-Lit Monitor","2017-02-21","100",new Boolean(true)};
 		
@@ -110,7 +110,7 @@ public class SetUpOrderFrame extends JPanel{
 		}
 		}	
 		return data;
-	}
+	}}
 	
 	} 
 	

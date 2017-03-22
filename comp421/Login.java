@@ -6,13 +6,15 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 
 public class Login extends JFrame{
-	JTextField userid = new JTextField ("");
-	JTextField phonenumber = new JTextField("");
+	JTextField userid = new JTextField ("user id");
+	JTextField phonenumber = new JTextField("Phone number");
 	JButton login = new JButton("Log in");
 	
 	SQL loginsql;
 	ResultSet rs;
 	String sqlcode;
+	String uid;
+	String pnum;
 	MainFrame mainFrame = null;
 	Login frame = this;
 	public Login(SQL sqlo,MainFrame mainFrame){
@@ -38,20 +40,21 @@ public class Login extends JFrame{
 	
 	class loginListener implements ActionListener {
 		public void actionPerformed(ActionEvent e){
-			String uid = userid.getText();
-			String pnum = phonenumber.getText();
-			
+			uid = userid.getText();
+			pnum = phonenumber.getText();
 			if(uid.trim().isEmpty() & pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null,"User id and phone number cannot leave blank ","Error", JOptionPane.ERROR_MESSAGE);
 			else if(uid.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your user id","Error", JOptionPane.ERROR_MESSAGE);
 			else if(pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your phone number","Error", JOptionPane.ERROR_MESSAGE);
-			else if(pnum.equals(pnum.equals(getresult()))) // The information is correct
+			else if(pnum.equals(getresult())) // The information is correct
 			{
-				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.INFORMATION_MESSAGE);
+				int userid= Integer.parseInt(uid);
+				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.OK_OPTION);
 				//  Pass the sql object with current user id
 				// implement sql code 
+				mainFrame.setUserid(userid);
 				mainFrame.setVisible(true);
 				frame.dispose();
 			}
@@ -60,7 +63,7 @@ public class Login extends JFrame{
 		}
 	}
 	public String getresult(){
-		sqlcode="";// Check the pnum based on the uid
+		sqlcode="select phoneNumber from users where userid = "+uid;// Check the pnum based on the uid
 		rs=loginsql.QueryExchte(sqlcode);
 		String pnumindb = rs.toString();
 		return pnumindb;

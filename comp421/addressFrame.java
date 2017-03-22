@@ -12,6 +12,7 @@ public class addressFrame extends JPanel
 {
 	int userid;
 	int orderNumber;
+	int addrid;
 	SQL sql;
 	Object[][] data = null;
 	
@@ -150,12 +151,6 @@ public class addressFrame extends JPanel
 
 	
 
-
-
-
-
-
-
 	private class Listener implements ActionListener
 {
      @Override
@@ -167,13 +162,15 @@ public class addressFrame extends JPanel
     	 
     	 //insert into Deliver_To
     	 //values(addrid, orderNumber, TimeDelivered);
-    	 String sqlCode ="";
-    	 sqlCode += "insert into Deliver_To values(";
-    	 sqlCode += rs.getInt(1);
-    	 sqlCode += frame.orderNumber;
+    	 try {
+			addrid = rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	 Date d = new Date();  
          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-         sqlCode += sdf.format(d)+ ");";
+         String sqlCode = "insert into Deliver_To values("+addrid+","+orderNumber+", \'"+sdf.format(d)+"\')";
     	 sql.WriteExcute(sqlCode);
     	 }
      

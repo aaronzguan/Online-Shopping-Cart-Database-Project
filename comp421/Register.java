@@ -58,7 +58,7 @@ public class Register extends JFrame{
 			String Bank = bank.getText();
 			String Org = organization.getText();
 			sqlcode = ""; // Insert a new buyer to table user and buyer.
-			if(Name.isEmpty()||Pnum.isEmpty()||Cardnum.isEmpty()||Expirydate.isEmpty()||Bank.isEmpty()||Org.isEmpty())
+			if(Name.trim().isEmpty()||Pnum.trim().isEmpty()||Cardnum.trim().isEmpty()||Expirydate.trim().isEmpty()||Bank.trim().isEmpty()||Org.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "It is required to fill in every blank","Error",JOptionPane.ERROR_MESSAGE);
 			else{
 				adduser.WriteExcute(sqlcode);

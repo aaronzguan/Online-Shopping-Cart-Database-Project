@@ -54,7 +54,7 @@ public class AddAddress extends JFrame {
 			
 			String sqlcode=""+userid+""; // Insert a new address of this user to the table address
 			
-			if(Name.isEmpty()||Pnum.isEmpty()||Streetaddr.isEmpty()||Province.isEmpty()||Postalcode.isEmpty())
+			if(Name.trim().isEmpty()||Pnum.trim().isEmpty()||Streetaddr.trim().isEmpty()||Province.trim().isEmpty()||Postalcode.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "It is required to fill in every blank","Error",JOptionPane.ERROR_MESSAGE);
 			else
 			{

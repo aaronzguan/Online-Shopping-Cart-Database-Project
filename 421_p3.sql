@@ -49,13 +49,13 @@ values(new_orderNumber, creationTime);
 insert into Contain
 values(new_orderNumber, itemid, quantity);
 -- java calculate totalamount
-insert into Orders(totalAmount)
-values(totalAmount);
+insert into Orders(totalAmount)     -- 这个是不是要改成update，还是insert
+values(totalAmount);          
 
 insert into Payment
 values(orderNumber, creditcardNumber, payTime);
 -- check if there is the orderNumber in Payment
-insert into Orders(paymentState)
+insert into Orders(paymentState)   -- 这个是不是要改成update，还是insert
 values(paymentState);
 
 

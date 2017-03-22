@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.*;
 import javax.swing.table.*;
+import java.text.SimpleDateFormat;
 
 public class addressFrame extends JPanel 
 {
@@ -26,7 +27,9 @@ public class addressFrame extends JPanel
 		this.orderNumber = orderNumber;
 		this.sql = sql;
 		this.mainFrame= mainFrame;
-		String sqlCode = "";
+
+	
+		String sqlCode = "select (addrid, name, province, city, streetaddr, postCode) from address where userid = " + userid;
 		rs = sql.QueryExchte(sqlCode);
         table = new JTable(new AddressModule());
         
@@ -47,7 +50,7 @@ public class addressFrame extends JPanel
 		
 		TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
 		
-		for(int i = 0; i<4; i++)
+		for(int i = 0; i<5; i++)
 	     {
 	    	 column = table.getColumnModel().getColumn(i);
 	    	 
@@ -66,7 +69,7 @@ public class addressFrame extends JPanel
 	{
 	   String[] columnName = {"Address", "select"};
 	   Object[][] data = null;
-	   Object[] longValue = {"Kitra N. Cabrera", "New Brunswick", "Campbellton, P.O. Box 268, 4081 Suspendisse Street", "E2J 3G6", new Boolean(false)};
+	   Object[] longValue = {"Kitra N. Cabrera", "New Brunswick", "Campbellton", "P.O. Box 268, 4081 Suspendisse Street", "E2J 3G6", new Boolean(false)};
 	   
 
 	   
@@ -103,10 +106,12 @@ public class addressFrame extends JPanel
 				 data = new Object[rs.getFetchSize()][4];
 				 while(rs.next())
 				 {
-					 data[count][0] = rs.getString(1);//name
-					    data[count][1] = rs.getString(2);	//province
-					    data[count][2] = rs.getInt(3);	//street address 
-					    data[count][3] = new Boolean(false);//checkbox
+					 data[count][0] = rs.getString(2);      //name
+					    data[count][1] = rs.getString(3);	//province
+					    data[count][2] = rs.getString(4);   //city
+					    data[count][3] = rs.getString(5);	//street address 
+					    data[count][4] = rs.getString(6);   //postCode
+					    data[count][5] = new Boolean(false);//checkbox
 					    count++;
 				 }
 			 }
@@ -156,14 +161,20 @@ public class addressFrame extends JPanel
      @Override
       public void actionPerformed(ActionEvent event) 
   {
-	// TODO Auto-generated method stub
+	
      if(event.getSource() ==  ConfirmButton)
     	 {
-    	 // to be  insert into deliver_to
-    	 String sqlCode = "";
+    	 
+    	 //insert into Deliver_To
+    	 //values(addrid, orderNumber, TimeDelivered);
+    	 String sqlCode ="";
+    	 sqlCode += "insert into Deliver_To values(";
+    	 sqlCode += rs.getInt(1);
+    	 sqlCode += frame.orderNumber;
+    	 Date d = new Date();  
+         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+         sqlCode += sdf.format(d)+ ");";
     	 sql.WriteExcute(sqlCode);
-    	//  java.sql.ResultSet rs = sql.QueryExchte(sqlCode);
-    	   
     	 }
      
   }

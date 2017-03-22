@@ -41,13 +41,13 @@ public class Register extends JFrame{
 		JFrame register = new Register(sqlo,mainFrame);
 		register.setVisible(true);
 		register.setSize(400, 200);
-		register.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		register.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		register.setLocationRelativeTo(null);
 		register.setTitle("Register a new User");
 	}
 	class registerlistener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			sqlcode ="";// get the max userid from user table
+			sqlcode ="select max(userid) from users";// get the max userid from user table
 			rs = adduser.QueryExchte(sqlcode);
 			userid = Integer.parseInt(rs.toString()) + 1;
 			
@@ -57,12 +57,19 @@ public class Register extends JFrame{
 			String Expirydate = expirydate.getText();
 			String Bank = bank.getText();
 			String Org = organization.getText();
-			sqlcode = ""; // Insert a new buyer to table user and buyer.
 			if(Name.trim().isEmpty()||Pnum.trim().isEmpty()||Cardnum.trim().isEmpty()||Expirydate.trim().isEmpty()||Bank.trim().isEmpty()||Org.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "It is required to fill in every blank","Error",JOptionPane.ERROR_MESSAGE);
 			else{
+				sqlcode = "insert into users values ("+userid+", \'"+Name+"\', \'"+Pnum+"\')"; // Insert a new buyer to table user and buyer.
 				adduser.WriteExcute(sqlcode);
+				sqlcode = "insert into bankcard values ("+Cardnum+", \'"+Expirydate+"\', \'"+Bank+"\')";
+				adduser.WriteExcute(sqlcode);
+				sqlcode = "insert into creitcard values ("+Cardnum+","+userid+", \'"+Org+"\')";
+				adduser.WriteExcute(sqlcode);
+				
+				JOptionPane.showMessageDialog(null, "You have successfully registed","Register Successfully",JOptionPane.OK_OPTION);
 				//Return back the current user id
+				
 				mainFrame.setUserid(userid);
 				mainFrame.setVisible(true);
 				frame.dispose();

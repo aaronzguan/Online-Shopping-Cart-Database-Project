@@ -40,17 +40,14 @@ public class Login extends JFrame{
 		public void actionPerformed(ActionEvent e){
 			String uid = userid.getText();
 			String pnum = phonenumber.getText();
-			sqlcode="";// Check the pnum based on the uid
-			rs=loginsql.QueryExchte(sqlcode);
-			String pnumindb = rs.toString();
 			
-			if(uid.isEmpty() & pnum.isEmpty())
+			if(uid.trim().isEmpty() & pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null,"User id and phone number cannot leave blank ","Error", JOptionPane.ERROR_MESSAGE);
-			else if(uid.isEmpty())
+			else if(uid.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your user id","Error", JOptionPane.ERROR_MESSAGE);
-			else if(pnum.isEmpty())
+			else if(pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your phone number","Error", JOptionPane.ERROR_MESSAGE);
-			else if(pnum.equals(pnumindb)) // The information is correct
+			else if(pnum.equals(pnum.equals(getresult()))) // The information is correct
 			{
 				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.INFORMATION_MESSAGE);
 				//  Pass the sql object with current user id
@@ -61,5 +58,11 @@ public class Login extends JFrame{
 			else
 				JOptionPane.showMessageDialog(null, "The user id or Phone number is not correct", "Log in failed",JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	public String getresult(){
+		sqlcode="";// Check the pnum based on the uid
+		rs=loginsql.QueryExchte(sqlcode);
+		String pnumindb = rs.toString();
+		return pnumindb;
 	}
 }

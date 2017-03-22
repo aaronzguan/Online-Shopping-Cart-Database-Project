@@ -74,6 +74,7 @@ public class AddAddress extends JFrame {
 				
 				mainFrame.setUserid(userid);
 				mainFrame.setVisible(true);
+				mainFrame.setSearchAndBuyButtonEnable(true);
 				frame.dispose();
 			}   
 		}

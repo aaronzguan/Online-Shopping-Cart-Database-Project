@@ -1,5 +1,6 @@
 package comp421;
-// sql code to be implemented in button 
+// sql code to be implemented in button  --done 
+// test if the address is empty 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -52,9 +53,8 @@ public class Login extends JFrame{
 			{
 				int userid= Integer.parseInt(uid);
 				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.OK_OPTION);
-				//  Pass the sql object with current user id
-				// implement sql code 
 				mainFrame.setUserid(userid);
+				mainFrame.setAddAddressButtonEnable(true);
 				mainFrame.setVisible(true);
 				frame.dispose();
 			}

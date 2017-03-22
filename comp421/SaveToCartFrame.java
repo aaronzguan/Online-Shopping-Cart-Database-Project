@@ -12,6 +12,7 @@ import javax.swing.table.*;
 
 //need to add button back -done 
 //sql code to be implemented in button editor -done
+// case no result is empty, will not have table, but implement an panel with notice 
 public class SaveToCartFrame extends JPanel {
 	
 	int userid; 
@@ -94,10 +95,10 @@ public class SaveToCartFrame extends JPanel {
                       String sqlCode = "";
                       sqlCode += "insert into Save_To_Shopping_Cart values(";
                       sqlCode += userid + ", ";
-                      sqlCode += table.getValueAt(row, 0)+", ";
+                      sqlCode += table.getValueAt(row, 0)+", ";// pid 
                       Date d = new Date();  
                       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                      sqlCode += sdf.format(d)+ ", ";
+                      sqlCode +="\'"+ sdf.format(d)+"\'"+ ", ";
                       if(getSize(result)==0)
                     	  sqlCode += "1);";
 					else

@@ -110,7 +110,7 @@ public class SearchFrame extends JFrame{
 					if(name != "")
 					{
 						notBlank = 1;
-						sqlCode += "name = "+name;
+						sqlCode += "name = \'"+name+"\'";
 					}
 					if(type!= "")
 					{
@@ -118,7 +118,7 @@ public class SearchFrame extends JFrame{
 							sqlCode += " And ";
 						else 
 							notBlank = 1;
-						sqlCode += "type = "+type;
+						sqlCode += "type = "+"\'"+type+"\'";
 					}
 					if(modelNum != "")
 					{
@@ -126,13 +126,13 @@ public class SearchFrame extends JFrame{
 							sqlCode += " And ";
 						else 
 							notBlank = 1;
-						sqlCode += "modelNumber ="+ modelNum;
+						sqlCode += "modelNumber ="+"\'"+ modelNum+"\'";
 					}
 					if(brand != "")
 					{
 						if(notBlank ==1)
 							sqlCode += " And ";
-						sqlCode += "brand = "+brand;
+						sqlCode += "brand = "+"\'"+brand+"\'";
 					}
 					sqlCode+= ";";   
 					  System.out.println(sqlCode);
@@ -151,7 +151,7 @@ public class SearchFrame extends JFrame{
 			     {
 			    	 //System.out.println("Back Button clicked ");
 			    	 mainFrame.setVisible(true);
-			    	 frame.setVisible(false);
+			    	 frame.dispose();
 			    	 //close and invoke original one 
 			    	 //to be implemented 
 			     

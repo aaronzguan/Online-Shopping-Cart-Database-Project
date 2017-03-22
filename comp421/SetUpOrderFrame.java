@@ -9,7 +9,8 @@ import java.util.*;
 import javax.swing.table.*;
 
 import comp421.SaveToCartFrame.goodsTableModule;
-// sql code to be implemented in submitButton 
+// sql code to be implemented in submitButton --done
+//case that there is nothing in the cart 
 
 public class SetUpOrderFrame extends JPanel{
 	
@@ -34,7 +35,7 @@ public class SetUpOrderFrame extends JPanel{
       * from  OrderItem O,Product P 
        where O.pid = P.pid and userid = userid  	
 	  */
-     String sqlCode = "select P.name, O.addTime, O.quantity, P.id, P.price from OrderItem O, Product P where O.pid = P.pid and userid = "+ userid + ";";
+     String sqlCode = "select P.name, S.addTime, S.quantity, P.id, P.price from Save_To_Shopping_Cart S, Product P where S.pid = P.pid and S.userid = "+ userid + ";";
      rs = sql.QueryExchte(sqlCode);
      table = new JTable(new OrderModule());
 	  this.mainFrame = mainFrame;
@@ -202,7 +203,7 @@ public class SetUpOrderFrame extends JPanel{
 		    sqlCode+= orderId+", ";
 		    Date d = new Date();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		    sqlCode += sdf.format(d)+");";
+		    sqlCode += "\'"+sdf.format(d)+"\'"+");";
 		    sql.WriteExcute(sqlCode);
 			
 			// insert order Items
@@ -234,7 +235,7 @@ public class SetUpOrderFrame extends JPanel{
 					sqlCode += (itemId+count) + ", ";
 					sqlCode += pid[i]+", ";
 					sqlCode += price[i]+", ";
-                     sqlCode += sdf.format(d)+ ");";
+                     sqlCode += "\'"+sdf.format(d)+"\'"+ ");";
                   //   System.out.print(sqlCode);
                      sql.WriteExcute(sqlCode);
                      totalAmount+= price[i];
@@ -258,7 +259,7 @@ public class SetUpOrderFrame extends JPanel{
 			/*insert into Orders(totalAmount)
 			 *values(totalAmount);
 			 */
-			sqlCode = "insert into Orders(totalAmount,paymentState) values("+totalAmount+", "+"Paid"+");";			
+			sqlCode = "insert into Orders(totalAmount,paymentState) values("+totalAmount+", "+"\'"+"Paid"+"\'"+");";			
 		    sql.WriteExcute(sqlCode);
 		    
 		    //add payment
@@ -279,8 +280,8 @@ public class SetUpOrderFrame extends JPanel{
              * values(orderNumber, creditcardNumber, payTime);*/
 		    sqlCode = "insert into Payment values(";
 		    sqlCode += orderId+", ";
-		    sqlCode += cardNumber +", ";
-		    sqlCode += sdf.format(d)+");";
+		    sqlCode +="\'"+ cardNumber +"\'"+", ";
+		    sqlCode += "\'"+sdf.format(d)+"\'"+");";
 		    sql.WriteExcute(sqlCode);
 		    //all sql done 
 		    
@@ -300,9 +301,6 @@ public class SetUpOrderFrame extends JPanel{
 			 mainFrame.setVisible(true);
 	    	 frame.dispose();
 		}
-				
-		// to be implemented
-		// pass the order id 
 	}
   
 	}

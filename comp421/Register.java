@@ -72,6 +72,7 @@ public class Register extends JFrame{
 				
 				mainFrame.setUserid(userid);
 				mainFrame.setVisible(true);
+				mainFrame.setAddAddressButtonEnable(true);
 				frame.dispose();
 			}
 		}

@@ -1,5 +1,5 @@
 package comp421;
-
+// sql code to be implemented in button 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,9 +13,13 @@ public class Login extends JFrame{
 	SQL loginsql;
 	ResultSet rs;
 	String sqlcode;
-	
-	public Login(SQL sqlo){
+	String uid;
+	String pnum;
+	MainFrame mainFrame = null;
+	Login frame = this;
+	public Login(SQL sqlo,MainFrame mainFrame){
 		loginsql=sqlo;
+		this.mainFrame = mainFrame;
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new GridLayout(2,2));
 		panel1.add(new JLabel("User id: ")); panel1.add (userid);
@@ -25,37 +29,43 @@ public class Login extends JFrame{
 		login.setPreferredSize(new Dimension(20,40));
 		this.add(login,BorderLayout.SOUTH);
 	}
-	public static void invoke(SQL sqlo){
-		JFrame login = new Login(sqlo);
+	public static void invoke(SQL sqlo,MainFrame mainFrame){
+		JFrame login = new Login(sqlo,mainFrame);
 		login.setTitle("User log in");
 		login.setLocationRelativeTo(null);
 		login.setSize(400,150);
 		login.setVisible(true);
-		login.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		login.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
 	class loginListener implements ActionListener {
 		public void actionPerformed(ActionEvent e){
-			String uid = userid.getText();
-			String pnum = phonenumber.getText();
-			sqlcode="";// Check the pnum based on the uid
-			rs=loginsql.QueryExchte(sqlcode);
-			String pnumindb = rs.toString();
-			
-			if(uid.isEmpty() & pnum.isEmpty())
+			uid = userid.getText();
+			pnum = phonenumber.getText();
+			if(uid.trim().isEmpty() & pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null,"User id and phone number cannot leave blank ","Error", JOptionPane.ERROR_MESSAGE);
-			else if(uid.isEmpty())
+			else if(uid.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your user id","Error", JOptionPane.ERROR_MESSAGE);
-			else if(pnum.isEmpty())
+			else if(pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your phone number","Error", JOptionPane.ERROR_MESSAGE);
-			else if(pnum.equals(pnumindb)) // The information is correct
+			else if(pnum.equals(getresult())) // The information is correct
 			{
-				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.INFORMATION_MESSAGE);
+				int userid= Integer.parseInt(uid);
+				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.OK_OPTION);
 				//  Pass the sql object with current user id
-				
+				// implement sql code 
+				mainFrame.setUserid(userid);
+				mainFrame.setVisible(true);
+				frame.dispose();
 			}
 			else
 				JOptionPane.showMessageDialog(null, "The user id or Phone number is not correct", "Log in failed",JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	public String getresult(){
+		sqlcode="select phoneNumber from users where userid = "+uid;// Check the pnum based on the uid
+		rs=loginsql.QueryExchte(sqlcode);
+		String pnumindb = rs.toString();
+		return pnumindb;
 	}
 }

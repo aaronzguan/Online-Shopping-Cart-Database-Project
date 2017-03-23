@@ -6,10 +6,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.*;
 
-//need to be modified 
-//show customer id and welcome string right side;
-// no id will demand string 
-// no address demand string 
 public class MainFrame extends JFrame{
 
 	JButton loginButton = new JButton("Login");
@@ -18,6 +14,8 @@ public class MainFrame extends JFrame{
 	JButton buyButton = new JButton ("View Shopping Cart and Purchase");
 	JButton addAddressButton = new JButton("Add a new Address");
 	JButton QuitButton = new JButton("Quit");
+	JLabel noticeString = new JLabel("Please login or Register first");
+	JLabel reminderString = new JLabel("");
 	MainFrame mainFrame = this;
 	SQL sql = null;
 	int userid;
@@ -55,12 +53,33 @@ public class MainFrame extends JFrame{
 	    
 	    setUserid(106);
 	    this.add(mainArc,BorderLayout.WEST);
-		
+		//Right Side 
+	    
+	    JPanel logoPanel = new JPanel();
+	    JLabel imageLabel = new JLabel(new ImageIcon("logo.png"));
+	    logoPanel.add(logoPanel);
+	    
+	    JPanel stringPanel =  new JPanel();
+	    
+	    stringPanel.add(noticeString);
+	    
+	    JPanel stringPanel2 = new JPanel();
+	    
+	    stringPanel2.add(reminderString);
+	    JPanel rightPanel = new JPanel();
+	    
+	    rightPanel.add(logoPanel, BorderLayout.NORTH);
+	    rightPanel.add(stringPanel,BorderLayout.CENTER);
+	    rightPanel.add(stringPanel2,BorderLayout.SOUTH);
+	    
+	    this.add(rightPanel, BorderLayout.EAST);   
 	}
+	
 	
 	public void setUserid(int id) throws SQLException
 	{
 		userid = id;
+		noticeString.setText("You have login with user id "+ id);
 		System.out.println("Userid is set to "+ userid);
 		setAddAddressButtonEnable(true);
 		//check if there is address ;
@@ -69,6 +88,10 @@ public class MainFrame extends JFrame{
 		if(result.next())
 		{
 			setSearchAndBuyButtonEnable(true);
+		}
+		else
+		{
+			reminderString.setText("Please add an address before your shopping");
 		}
 		
 		
@@ -80,6 +103,7 @@ public class MainFrame extends JFrame{
 	}
 	public void setSearchAndBuyButtonEnable(boolean b)
 	{
+		reminderString.setText("Please enjoy your shopping!");
 		searchProductButton.setEnabled(b);
 		buyButton.setEnabled(b);
 	}

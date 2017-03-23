@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 // need to be modified 
 // card valid data should follow format strictly
 // card number should be made up with only numbers and space ,but no character

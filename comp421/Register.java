@@ -71,6 +71,10 @@ public class Register extends JFrame{
 			String Org = organization.getText();
 			if(Name.trim().isEmpty()||Pnum.trim().isEmpty()||Cardnum.trim().isEmpty()||Expirydate.trim().isEmpty()||Bank.trim().isEmpty()||Org.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "It is required to fill in every blank","Error",JOptionPane.ERROR_MESSAGE);
+			else if(!isValidCard(Cardnum))
+				JOptionPane.showMessageDialog(null, "The card number is not correct","Error",JOptionPane.ERROR_MESSAGE);
+			else if(!isValidDate(Expirydate))
+				JOptionPane.showMessageDialog(null, "The format of expiry date is not correct","Error",JOptionPane.ERROR_MESSAGE);
 			else{
 				sqlcode = "insert into users values ("+userid+", \'"+Name+"\', \'"+Pnum+"\')"; // Insert a new buyer to table user and buyer.
 				adduser.WriteExcute(sqlcode);
@@ -98,5 +102,30 @@ public class Register extends JFrame{
 			}
 		}
 		
+	}
+	public boolean isValidCard(String cardnum){
+		String cardPattern="\\d{4} \\d{4} \\d{4} \\d{4}";
+		Pattern pattern=Pattern.compile(cardPattern);
+		Matcher match=pattern.matcher(cardnum);
+		if(match.matches())
+			return true;
+		else 
+			return false;
+	}
+	public boolean isValidDate(String date){
+		
+		String datePattern = "\\d{4}-\\d{1,2}-\\d{1,2}"; 
+		
+		Pattern pattern= Pattern.compile(datePattern);
+		Matcher match= pattern.matcher(date);
+		if(match.matches()){
+				if(date.charAt(5) =='0'&& date.charAt(6)=='0')
+					return false;
+				if(date.charAt(8) =='0'&&date.charAt(9) =='0')
+					return false;
+			return true;
+		}
+		else
+			return false;
 	}
 }

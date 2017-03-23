@@ -253,6 +253,7 @@ public class addressFrame extends JPanel
              SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
              String sqlCode = "insert into Deliver_To values("+addrid[selected]+","+orderNumber+", \'"+sdf.format(d)+"\');";
         	 sql.WriteExcute(sqlCode);
+        	 JOptionPane.showMessageDialog(null, "Your ordered is confirmed. Thank you for your purchase!", "Success", JOptionPane.INFORMATION_MESSAGE,new ImageIcon(addressFrame.class.getResource("success.png")));
         	 mainFrame.setVisible(true);
         	 frame.dispose();
         	 

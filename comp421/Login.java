@@ -55,7 +55,7 @@ public class Login extends JFrame{
 					if(pnum.equals(getresult())) // The information is correct
 					{
 						int userid= Integer.parseInt(uid);
-						JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.OK_OPTION);
+						JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.INFORMATION_MESSAGE,new ImageIcon(Login.class.getResource("success.png")));
 						mainFrame.setUserid(userid);
 						mainFrame.setAddAddressButtonEnable(true);
 						mainFrame.setVisible(true);

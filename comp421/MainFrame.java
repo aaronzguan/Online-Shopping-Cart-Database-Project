@@ -82,6 +82,8 @@ public class MainFrame extends JFrame{
 		noticeString.setText("You have login with user id "+ id);
 		System.out.println("Userid is set to "+ userid);
 		setAddAddressButtonEnable(true);
+		setLoginButtonEnable(false);
+		setRegisterEnable(false);
 		//check if there is address ;
 		String sqlCode = "select * from address where userid = "+id;
 		java.sql.ResultSet result = sql.QueryExchte(sqlCode);
@@ -106,6 +108,14 @@ public class MainFrame extends JFrame{
 		reminderString.setText("Please enjoy your shopping!");
 		searchProductButton.setEnabled(b);
 		buyButton.setEnabled(b);
+	}
+	
+	public void setLoginButtonEnable(boolean b){
+		loginButton.setEnabled(b);
+	}
+	
+	public void setRegisterEnable(boolean b){
+		registerButton.setEnabled(b);
 	}
 	
 	

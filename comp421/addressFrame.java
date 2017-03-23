@@ -42,18 +42,18 @@ public class addressFrame extends JPanel
         table.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 if(e.getClickCount() == 1){
-                    int columnIndex = table.columnAtPoint(e.getPoint()); //»ñÈ¡µã»÷µÄÁĞ
-                    int rowIndex = table.rowAtPoint(e.getPoint()); //»ñÈ¡µã»÷µÄĞĞ
+                    int columnIndex = table.columnAtPoint(e.getPoint()); //è·å–ç‚¹å‡»çš„åˆ—
+                    int rowIndex = table.rowAtPoint(e.getPoint()); //è·å–ç‚¹å‡»çš„è¡Œ
                    
-                    if(columnIndex == 5) {//µÚ0ÁĞÊ±£¬Ö´ĞĞ´úÂë
-                        if(table.getValueAt(rowIndex,columnIndex) == null){ //Èç¹ûÎ´³õÊ¼»¯£¬ÔòÉèÖÃÎªfalse
+                    if(columnIndex == 5) {//ç¬¬0åˆ—æ—¶ï¼Œæ‰§è¡Œä»£ç 
+                        if(table.getValueAt(rowIndex,columnIndex) == null){ //å¦‚æœæœªåˆå§‹åŒ–ï¼Œåˆ™è®¾ç½®ä¸ºfalse
                               table.setValueAt(false, rowIndex, columnIndex);
                           }
                        
-                        if(((Boolean)table.getValueAt(rowIndex,columnIndex)).booleanValue()){ //Ô­À´Ñ¡ÖĞ
-                               table.setValueAt(false, rowIndex ,5); //µã»÷ºó£¬È¡ÏûÑ¡ÖĞ
+                        if(((Boolean)table.getValueAt(rowIndex,columnIndex)).booleanValue()){ //åŸæ¥é€‰ä¸­
+                               table.setValueAt(false, rowIndex ,5); //ç‚¹å‡»åï¼Œå–æ¶ˆé€‰ä¸­
                           }
-                        else {//Ô­À´Î´Ñ¡ÖĞ
+                        else {//åŸæ¥æœªé€‰ä¸­
                               table.setValueAt(true, rowIndex, 5);
                           }
                      }
@@ -132,7 +132,7 @@ public class addressFrame extends JPanel
 		
 		public boolean isCellEditable(int row, int column)  
         {  
-            // ´øÓĞ°´Å¥ÁĞµÄ¹¦ÄÜÕâÀï±ØĞëÒª·µ»Øtrue²»È»°´Å¥µã»÷Ê±²»»á´¥·¢±à¼­Ğ§¹û£¬Ò²¾Í²»»á´¥·¢ÊÂ¼ş¡£   
+            // å¸¦æœ‰æŒ‰é’®åˆ—çš„åŠŸèƒ½è¿™é‡Œå¿…é¡»è¦è¿”å›trueä¸ç„¶æŒ‰é’®ç‚¹å‡»æ—¶ä¸ä¼šè§¦å‘ç¼–è¾‘æ•ˆæœï¼Œä¹Ÿå°±ä¸ä¼šè§¦å‘äº‹ä»¶ã€‚   
             if (column == 5)  
             {  
                 return true;  
@@ -257,9 +257,6 @@ public class addressFrame extends JPanel
         	 frame.dispose();
         	 
     	 }
-    	 
-    	 
-    	 
     	 }
      
   }

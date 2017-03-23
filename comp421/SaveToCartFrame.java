@@ -64,7 +64,7 @@ public class SaveToCartFrame extends JPanel {
 
     	        this.initPanel();
 
-    	        // Ìí¼Ó°´Å¥¡£
+    	        // æ·»åŠ æŒ‰é’®ã€‚
     	        this.panel.add(this.button);
     	    }
     	   
@@ -118,8 +118,6 @@ public class SaveToCartFrame extends JPanel {
               
               this.button.addActionListener(new ActionListener()
               {   
-              	
-              	
                   public void actionPerformed(ActionEvent e)
                   {
                    
@@ -291,7 +289,7 @@ public class SaveToCartFrame extends JPanel {
 		@Override  
         public boolean isCellEditable(int row, int column)  
         {  
-            // ´øÓĞ°´Å¥ÁĞµÄ¹¦ÄÜÕâÀï±ØĞëÒª·µ»Øtrue²»È»°´Å¥µã»÷Ê±²»»á´¥·¢±à¼­Ğ§¹û£¬Ò²¾Í²»»á´¥·¢ÊÂ¼ş¡£   
+            // å¸¦æœ‰æŒ‰é’®åˆ—çš„åŠŸèƒ½è¿™é‡Œå¿…é¡»è¦è¿”å›trueä¸ç„¶æŒ‰é’®ç‚¹å‡»æ—¶ä¸ä¼šè§¦å‘ç¼–è¾‘æ•ˆæœï¼Œä¹Ÿå°±ä¸ä¼šè§¦å‘äº‹ä»¶ã€‚   
             if (column == 9)  
             {  
                 return true;  

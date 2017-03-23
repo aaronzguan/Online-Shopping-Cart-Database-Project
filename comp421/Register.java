@@ -121,10 +121,16 @@ public class Register extends JFrame{
 		Pattern pattern= Pattern.compile(datePattern);
 		Matcher match= pattern.matcher(date);
 		if(match.matches()){
-				if(date.charAt(5) =='0'&& date.charAt(6)=='0')
+			if(date.length()==8){
+				if(date.charAt(5) =='0'|| date.charAt(7)=='0')
+					return false;
+			}
+			if(date.length()==10){
+				if(date.charAt(5) =='0'&&date.charAt(6) =='0')
 					return false;
 				if(date.charAt(8) =='0'&&date.charAt(9) =='0')
 					return false;
+			}
 			return true;
 		}
 		else

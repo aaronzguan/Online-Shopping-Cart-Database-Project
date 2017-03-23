@@ -1,8 +1,12 @@
 package comp421;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -51,13 +55,13 @@ public class MainFrame extends JFrame{
 	    mainArc.add(QuitButton); 
 	    
 	    
-	    setUserid(106);
+	    //setUserid(106);
 	    this.add(mainArc,BorderLayout.WEST);
 		//Right Side 
 	    
 	    JPanel logoPanel = new JPanel();
-	    JLabel imageLabel = new JLabel(new ImageIcon("logo.png"));
-	    logoPanel.add(logoPanel);
+	    JLabel imageLabel = new JLabel(new ImageIcon(MainFrame.class.getResource("logo.png")));
+	    logoPanel.add(imageLabel);
 	    
 	    JPanel stringPanel =  new JPanel();
 	    
@@ -68,9 +72,10 @@ public class MainFrame extends JFrame{
 	    stringPanel2.add(reminderString);
 	    JPanel rightPanel = new JPanel();
 	    
-	    rightPanel.add(logoPanel, BorderLayout.NORTH);
-	    rightPanel.add(stringPanel,BorderLayout.CENTER);
-	    rightPanel.add(stringPanel2,BorderLayout.SOUTH);
+	    rightPanel.setLayout(new GridLayout(0,1));
+	    rightPanel.add(logoPanel);
+	    rightPanel.add(stringPanel);
+	    rightPanel.add(stringPanel2);
 	    
 	    this.add(rightPanel, BorderLayout.EAST);   
 	}
@@ -127,7 +132,7 @@ public class MainFrame extends JFrame{
 	        frame.setTitle("C2C Online Electronic Shop");
 	        frame.setLocationRelativeTo(null);
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        frame.setSize(500, 400);
+	        frame.setSize(500, 700);
 	        
 	        
 	       frame.setVisible(true);
@@ -214,6 +219,3 @@ public class MainFrame extends JFrame{
 
 	    
 	}
-
-	
-

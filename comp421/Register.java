@@ -87,7 +87,7 @@ public class Register extends JFrame{
 				sqlcode = "insert into Buyer values("+userid+");";
 				adduser.WriteExcute(sqlcode);
 				
-				JOptionPane.showMessageDialog(null, "You have successfully registed, your unique userid is "+ userid+", please keep it for login next time","Register Successfully",JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(null, "You have successfully registed, your unique userid is "+ userid+", please keep it for login next time","Register Successfully",JOptionPane.INFORMATION_MESSAGE,new ImageIcon(Register.class.getResource("success.png")));
 				//Return back the current user id
 				
 					

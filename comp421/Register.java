@@ -3,15 +3,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+// need to be modified 
+// card valid data should follow format strictly
+// card number should be made up with only numbers and space ,but no character
+// 
 
 
 public class Register extends JFrame{
-	JTextField name = new JTextField("Name");
-	JTextField phonenum = new JTextField("Phone Number");
-	JTextField cardnum = new JTextField("Card Number");
-	JTextField expirydate = new JTextField("Expiry Date");
-	JTextField bank = new JTextField("Bank");
-	JTextField organization = new JTextField("Organization");
+	JTextField name = new JTextField();
+	JTextField phonenum = new JTextField();
+	JTextField cardnum = new JTextField();
+	JTextField expirydate = new JTextField();
+	JTextField bank = new JTextField();
+	JTextField organization = new JTextField();
 	JButton submit = new JButton("submit");
 	MainFrame mainFrame = null;
 	Register frame = this;
@@ -47,9 +52,16 @@ public class Register extends JFrame{
 	}
 	class registerlistener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			sqlcode ="select max(userid) from users";// get the max userid from user table
+			sqlcode ="select max(userid) from users;";// get the max userid from user table
 			rs = adduser.QueryExchte(sqlcode);
-			userid = Integer.parseInt(rs.toString()) + 1;
+			try {
+				rs.next();
+				userid = rs.getInt(1)+1;
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			
 			String Name = name.getText();
 			String Pnum = phonenum.getText();
@@ -62,15 +74,24 @@ public class Register extends JFrame{
 			else{
 				sqlcode = "insert into users values ("+userid+", \'"+Name+"\', \'"+Pnum+"\')"; // Insert a new buyer to table user and buyer.
 				adduser.WriteExcute(sqlcode);
-				sqlcode = "insert into bankcard values ("+Cardnum+", \'"+Expirydate+"\', \'"+Bank+"\')";
+				sqlcode = "insert into bankcard values (\'"+Cardnum+"\', \'"+Expirydate+"\', \'"+Bank+"\');";
 				adduser.WriteExcute(sqlcode);
-				sqlcode = "insert into creitcard values ("+Cardnum+","+userid+", \'"+Org+"\')";
+				sqlcode = "insert into creditcard values (\'"+Cardnum+"\',"+userid+", \'"+Org+"\');";
+				adduser.WriteExcute(sqlcode);
+				sqlcode = "insert into Buyer values("+userid+");";
 				adduser.WriteExcute(sqlcode);
 				
-				JOptionPane.showMessageDialog(null, "You have successfully registed","Register Successfully",JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(null, "You have successfully registed, your unique userid is "+ userid+", please keep it for login next time","Register Successfully",JOptionPane.OK_OPTION);
 				//Return back the current user id
 				
-				mainFrame.setUserid(userid);
+					
+				
+				try {
+					mainFrame.setUserid(userid);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				mainFrame.setVisible(true);
 				mainFrame.setAddAddressButtonEnable(true);
 				frame.dispose();

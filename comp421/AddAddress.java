@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AddAddress extends JFrame {
 	JTextField name= new JTextField("Name");
@@ -25,6 +26,7 @@ public class AddAddress extends JFrame {
 	public AddAddress(int uid,SQL sqlo,MainFrame mainFrame){
 		this.mainFrame = mainFrame;
 		userid = uid;
+		System.out.println("userid = "+ userid);
 		newaddr=sqlo;
 		JPanel jpanel = new JPanel();
 		jpanel.setLayout(new GridLayout(6,2));
@@ -40,10 +42,7 @@ public class AddAddress extends JFrame {
 		this.add(add,BorderLayout.SOUTH);
 	}
 	public static void invoke (int uid, SQL sqlo,MainFrame  mainFrame){
-		int Userid;
-		Userid = uid;
-		SQL Addr=sqlo;
-		JFrame address = new AddAddress(Userid,Addr,mainFrame);
+		JFrame address = new AddAddress(uid,sqlo,mainFrame);
 		address.setTitle("Add a new address");
 		address.setVisible(true);
 		address.setLocationRelativeTo(null);
@@ -55,7 +54,14 @@ public class AddAddress extends JFrame {
 		public void actionPerformed(ActionEvent e){
 			sqlcode="select max(addrid) from address";
 			rs=newaddr.QueryExchte(sqlcode);
-			addrid= Integer.parseInt(rs.toString())+1;
+			try {	
+				rs.next();
+				addrid= rs.getInt(1)+1;
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			
 			String Name= name.getText();
 			String Pnum= phonenum.getText();
@@ -72,7 +78,7 @@ public class AddAddress extends JFrame {
 				newaddr.WriteExcute(sqlcode);
 				JOptionPane.showMessageDialog(null, "You have successfully added a new address", "Success", JOptionPane.OK_OPTION);
 				
-				mainFrame.setUserid(userid);
+				
 				mainFrame.setVisible(true);
 				mainFrame.setSearchAndBuyButtonEnable(true);
 				frame.dispose();

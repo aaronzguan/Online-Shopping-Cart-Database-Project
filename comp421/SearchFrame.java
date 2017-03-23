@@ -102,17 +102,17 @@ public class SearchFrame extends JFrame{
 				    where name = name and type = type and modelNumber = modelNumber and brand = brand;
 					*/
 				    
-				    sqlCode += "select * from product";
+				    sqlCode += "select * from product ";
 					int notBlank = 0;
-					if((name != "") || ( type != "") ||(modelNum != "")|| (brand!= ""))		  
-					   sqlCode += "where";
+					if((name.length())!=0 || ( type.length() != 0) ||(modelNum.length()!= 0)|| (brand.length()!= 0))		  
+					   sqlCode += "where ";
 				     
-					if(name != "")
+					if(name.length()!=0)
 					{
 						notBlank = 1;
 						sqlCode += "name = \'"+name+"\'";
 					}
-					if(type!= "")
+					if(type.length() != 0)
 					{
 						if(notBlank == 1)
 							sqlCode += " And ";
@@ -120,7 +120,7 @@ public class SearchFrame extends JFrame{
 							notBlank = 1;
 						sqlCode += "type = "+"\'"+type+"\'";
 					}
-					if(modelNum != "")
+					if(modelNum.length()!= 0)
 					{
 						if(notBlank == 1)
 							sqlCode += " And ";
@@ -128,7 +128,7 @@ public class SearchFrame extends JFrame{
 							notBlank = 1;
 						sqlCode += "modelNumber ="+"\'"+ modelNum+"\'";
 					}
-					if(brand != "")
+					if(brand.length()!= 0)
 					{
 						if(notBlank ==1)
 							sqlCode += " And ";
@@ -138,6 +138,19 @@ public class SearchFrame extends JFrame{
 					  System.out.println(sqlCode);
 			    	  java.sql.ResultSet rs = sql.QueryExchte(sqlCode);
 			    	  
+			    	  
+			    	  int rowCount = 0;
+			          try {
+			              rs.last();
+			              rowCount = rs.getRow();
+			              rs.first();
+			          } catch (Exception e) {
+			              // TODO: handle exception
+			              e.printStackTrace();
+			          }
+			          if(rowCount == 0)			   
+			          	JOptionPane.showMessageDialog(null, "No Result is found", "NO Result",JOptionPane.OK_OPTION);			      	
+			          else 
 			    	  try {
 						SaveToCartFrame.invoke(userid, sql, rs, frame);
 						frame.setVisible(false);

@@ -5,6 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.*;
+
+//need to be modified 
+//show customer id and welcome string right side;
+// no id will demand string 
+// no address demand string 
 public class MainFrame extends JFrame{
 
 	JButton loginButton = new JButton("Login");
@@ -19,8 +24,9 @@ public class MainFrame extends JFrame{
 	public MainFrame() throws SQLException
 	{
 		// run initial the sql, build connection 
-		//sql = new SQL();
+		sql = new SQL();
 		 userid = 0;
+		 
 		// button panel for frame
 		 JPanel mainArc  = new JPanel();
 	     mainArc.setLayout(new GridLayout(6,1,25,0));
@@ -34,27 +40,38 @@ public class MainFrame extends JFrame{
 		mainArc.add(registerButton);
 		
 		addAddressButton.addActionListener(listener);
-        addAddressButton.setEnabled(true);
+        addAddressButton.setEnabled(false);
 		mainArc.add(addAddressButton);
 		searchProductButton.addActionListener(listener);
-		searchProductButton.setEnabled(true);
+		searchProductButton.setEnabled(false);
 		mainArc.add(searchProductButton);
 		buyButton.addActionListener(listener);
-		buyButton.setEnabled(true);
+		buyButton.setEnabled(false);
 		mainArc.add(buyButton);
 		
 		QuitButton.addActionListener(listener);
 	    mainArc.add(QuitButton); 
 	    
 	    
-	    
+	    setUserid(106);
 	    this.add(mainArc,BorderLayout.WEST);
 		
 	}
 	
-	public void setUserid(int id)
+	public void setUserid(int id) throws SQLException
 	{
 		userid = id;
+		System.out.println("Userid is set to "+ userid);
+		setAddAddressButtonEnable(true);
+		//check if there is address ;
+		String sqlCode = "select * from address where userid = "+id;
+		java.sql.ResultSet result = sql.QueryExchte(sqlCode);
+		if(result.next())
+		{
+			setSearchAndBuyButtonEnable(true);
+		}
+		
+		
 	}
 	
 	public void setAddAddressButtonEnable(boolean b)
@@ -90,11 +107,9 @@ public class MainFrame extends JFrame{
 
 
 			SQL sql = null;
-			int userid;
 			public MainButtonListener(SQL sqlpassed)
 			{
 			    sql = sqlpassed;	
-			    userid = 0;
 			}
 			
 			
@@ -115,7 +130,9 @@ public class MainFrame extends JFrame{
 				else if (event.getSource() == addAddressButton)
 				{
 					//mainFrame to be passed 
+					System.out.println("userid = "+ userid+ "is passed to addAddressButton");
 					AddAddress.invoke(userid,sql,mainFrame);
+				
 					mainFrame.setVisible(false);
 				}
 				else if (event.getSource() == searchProductButton)
@@ -128,9 +145,24 @@ public class MainFrame extends JFrame{
 				}
 				else if(event.getSource() == buyButton)
 				{
-				//done 
+				 String sqlCode = "select P.name, S.addTime, S.quantity, P.pid, P.price from Save_To_Shopping_Cart S, Product P where S.pid = P.pid and S.userid = "+ userid + ";";
+				 java.sql.ResultSet rs = sql.QueryExchte(sqlCode);
+				 
+				 
+				 int rowCount = 0;
+		          try {
+		              rs.last();
+		              rowCount = rs.getRow();
+		              rs.first();
+		          } catch (Exception e) {
+		              // TODO: handle exception
+		              e.printStackTrace();
+		          }
+		          if(rowCount == 0)			   
+		          	JOptionPane.showMessageDialog(null, "No product is added into cart yet", "NO Result",JOptionPane.OK_OPTION);			      	
+		          else 
 					try {
-						SetUpOrderFrame.invoke(userid, sql,mainFrame);
+						SetUpOrderFrame.invoke(userid, sql,rs,mainFrame);
 						mainFrame.setVisible(false);
 					} catch (SQLException e) {
 					}

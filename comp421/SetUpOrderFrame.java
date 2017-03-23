@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,7 +27,7 @@ public class SetUpOrderFrame extends JPanel{
 	MainFrame mainFrame;
 	java.sql.ResultSet rs = null;
 	JFrame frame = null;
-	public SetUpOrderFrame(int id,SQL sql,MainFrame mainFrame) throws SQLException
+	public SetUpOrderFrame(int id,SQL sql,MainFrame mainFrame,java.sql.ResultSet rs) throws SQLException
 	{
 	 userid = id;
 	 this.sql = sql;
@@ -35,10 +37,38 @@ public class SetUpOrderFrame extends JPanel{
       * from  OrderItem O,Product P 
        where O.pid = P.pid and userid = userid  	
 	  */
-     String sqlCode = "select P.name, S.addTime, S.quantity, P.id, P.price from Save_To_Shopping_Cart S, Product P where S.pid = P.pid and S.userid = "+ userid + ";";
-     rs = sql.QueryExchte(sqlCode);
+	 this.rs= rs; 
      table = new JTable(new OrderModule());
 	  this.mainFrame = mainFrame;
+	  
+	  TableColumnModel tcm = table.getColumnModel();
+      tcm.getColumn(3).setCellEditor(new DefaultCellEditor(new JCheckBox()));
+ 
+      table.addMouseListener(new MouseAdapter(){
+          public void mouseClicked(MouseEvent e){
+              if(e.getClickCount() == 1){
+                  int columnIndex = table.columnAtPoint(e.getPoint()); //获取点击的列
+                  int rowIndex = table.rowAtPoint(e.getPoint()); //获取点击的行
+                  
+                  if(columnIndex == 3) {//第0列时，执行代码
+                      if(table.getValueAt(rowIndex,columnIndex) == null){ //如果未初始化，则设置为false
+                            table.setValueAt(false, rowIndex, columnIndex);
+                        }
+                     
+                      if(((Boolean)table.getValueAt(rowIndex,columnIndex)).booleanValue()){ //原来选中
+                             table.setValueAt(false, rowIndex, 3); //点击后，取消选中
+                        }
+                      else {//原来未选中
+                            table.setValueAt(true, rowIndex, 3);
+                        }
+                   }
+
+              }
+          }
+      });
+      
+	  
+	  
      JScrollPane scrollPane = new JScrollPane(table);
      initColumnSizes(table);
 	 add(scrollPane);
@@ -60,9 +90,10 @@ public class SetUpOrderFrame extends JPanel{
 	    	 
 	    	 comp = headerRenderer.getTableCellRendererComponent(table, longValue[i], false, false, 0, 0);
 	    	 headerWidth = comp.getPreferredSize().width;
-	    	 comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(
+	    	/* comp = table.getDefaultRenderer(model.getColumnClass(i)).getTableCellRendererComponent(
                         table, longValue[i],
                         false, false, 0, i);
+                        */
             cellWidth = comp.getPreferredSize().width;
             
             column.setPreferredWidth(Math.max(headerWidth, cellWidth));
@@ -105,10 +136,32 @@ public class SetUpOrderFrame extends JPanel{
 		public int getRowCount() {
 			return data.length;
 		}
+		public boolean isCellEditable(int row, int column)  
+        {  
+            // 带有按钮列的功能这里必须要返回true不然按钮点击时不会触发编辑效果，也就不会触发事件。   
+            if (column == 3)  
+            {  
+                return true;  
+            }  
+            else  
+            {  
+                return false;  
+            }  
+        } 
+		@Override
+		 public String getColumnName(int col) {
+           return columnName[col];
+       }
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			return data[rowIndex][columnIndex];
+		}
+		
+		public void setValueAt(Object o, int rowIndex, int columnIndex)
+		{
+			data[rowIndex][columnIndex] = o;
+			table.repaint();
 		}
 		
 		 public Class getColumnClass(int c) {
@@ -124,8 +177,8 @@ public class SetUpOrderFrame extends JPanel{
 		  data = new Object[getSize(rs)][4];
 		  pid = new int[getSize(rs)];
 		  price = new int[getSize(rs)];
-		  
-		  while(rs.next())
+		  if(data.length!=0)
+		 do 
 		{
 		    data[count][0] = rs.getString(1);//product name
 		    data[count][1] = rs.getString(2);	//last added date 
@@ -134,7 +187,7 @@ public class SetUpOrderFrame extends JPanel{
 		    pid[count] = rs.getInt(4);
 		    price[count] = rs.getInt(5);
 		    count++;
-		}
+		}while(rs.next());
 		}	
 		return data;
 	}
@@ -169,9 +222,9 @@ public class SetUpOrderFrame extends JPanel{
 	}
 	
 	
-	static public void invoke(int id, SQL sql,MainFrame mainFrame) throws SQLException
+	static public void invoke(int id, SQL sql,java.sql.ResultSet rs,MainFrame mainFrame) throws SQLException
 	{
-		SetUpOrderFrame frame = new SetUpOrderFrame(id,sql,mainFrame);
+		SetUpOrderFrame frame = new SetUpOrderFrame(id,sql,mainFrame,rs);
 		frame.createUI(id, sql);
 	}
 		
@@ -259,7 +312,7 @@ public class SetUpOrderFrame extends JPanel{
 			/*insert into Orders(totalAmount)
 			 *values(totalAmount);
 			 */
-			sqlCode = "insert into Orders(totalAmount,paymentState) values("+totalAmount+", "+"\'"+"Paid"+"\'"+");";			
+			sqlCode = "update Orders set totalAmount ="+totalAmount+", "+"paymentstate =\'Paid\'"+"where orderNumber ="+orderId+";";			
 		    sql.WriteExcute(sqlCode);
 		    
 		    //add payment

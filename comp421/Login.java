@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Login extends JFrame{
 	JTextField userid = new JTextField ("user id");
@@ -49,23 +50,31 @@ public class Login extends JFrame{
 				JOptionPane.showMessageDialog(null, "You must input your user id","Error", JOptionPane.ERROR_MESSAGE);
 			else if(pnum.trim().isEmpty())
 				JOptionPane.showMessageDialog(null, "You must input your phone number","Error", JOptionPane.ERROR_MESSAGE);
-			else if(pnum.equals(getresult())) // The information is correct
-			{
-				int userid= Integer.parseInt(uid);
-				JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.OK_OPTION);
-				mainFrame.setUserid(userid);
-				mainFrame.setAddAddressButtonEnable(true);
-				mainFrame.setVisible(true);
-				frame.dispose();
-			}
 			else
-				JOptionPane.showMessageDialog(null, "The user id or Phone number is not correct", "Log in failed",JOptionPane.ERROR_MESSAGE);
+				try {
+					if(pnum.equals(getresult())) // The information is correct
+					{
+						int userid= Integer.parseInt(uid);
+						JOptionPane.showMessageDialog(null, "You have logged in successfully", "Log in successfully",JOptionPane.OK_OPTION);
+						mainFrame.setUserid(userid);
+						mainFrame.setAddAddressButtonEnable(true);
+						mainFrame.setVisible(true);
+						frame.dispose();
+					}
+					else
+						JOptionPane.showMessageDialog(null, "The user id or Phone number is not correct", "Log in failed",JOptionPane.ERROR_MESSAGE);
+				} catch (NumberFormatException | HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		}
 	}
-	public String getresult(){
+	public String getresult() throws SQLException{
 		sqlcode="select phoneNumber from users where userid = "+uid;// Check the pnum based on the uid
 		rs=loginsql.QueryExchte(sqlcode);
-		String pnumindb = rs.toString();
+		rs.next();
+		String pnumindb = rs.getString(1);
+		System.out.println("for userid "+uid+" the phonenumber should be "+ pnumindb);
 		return pnumindb;
 	}
 }

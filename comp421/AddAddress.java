@@ -76,7 +76,7 @@ public class AddAddress extends JFrame {
 			{
 				sqlcode="insert into address values ("+addrid+","+userid+", \'"+Name+"\', \'"+Pnum+"\', \'"+Province+"\', \'"+City+"\', \'"+Streetaddr+"\', \'"+Postalcode+"\')"; // Insert a new address of this user to the table address
 				newaddr.WriteExcute(sqlcode);
-				JOptionPane.showMessageDialog(null, "You have successfully added a new address", "Success", JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(null, "You have successfully added a new address", "Success", JOptionPane.INFORMATION_MESSAGE,new ImageIcon(AddAddress.class.getResource("success.png")));
 				
 				
 				mainFrame.setVisible(true);

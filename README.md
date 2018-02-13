@@ -1,6 +1,6 @@
 # Online-Shopping-Cart-Database-Project
 
-You may find more details about this project at http://www.aaronguan.com/database-project.html
+You may find more details about this project at my [personal blog](http://www.aaronguan.com/database-project.html)
 
 ## ER Diagram
 
@@ -20,7 +20,7 @@ You may find more details about this project at http://www.aaronguan.com/databas
 * Order (__orderNumber__, creationTime, paymentStatus, totalAmount)
 * Address (__addrid__, userid, name, city, postalCode, streetAddr, province, contactPhoneNumber)
 
-### Relationship
+### Relationships
 
 * Manage (__userid__, __sid__, SetupTime) (userid ref Seller, sid ref Store)
 * Save to Shopping Cart (__userid__, __pid__, quantity, addtime) (userid ref Buyer, pid ref Product)
@@ -30,7 +30,7 @@ You may find more details about this project at http://www.aaronguan.com/databas
 
 ## Create Database
 
-* [Table.sql](https://github.com/aaronzguan/Online-Shopping-Cart-Database-Project/blob/master/Table.sql): create tables.
+* [Table.sql](https://github.com/aaronzguan/Online-Shopping-Cart-Database-Project/blob/master/Table.sql): Create tables for entities and relationships above.
 * [Insert.sql](https://github.com/aaronzguan/Online-Shopping-Cart-Database-Project/blob/master/Insert.sql): Insert datas into tables.
 * [Modification.sql](https://github.com/aaronzguan/Online-Shopping-Cart-Database-Project/blob/master/Modification.sql): Modify the data.
 

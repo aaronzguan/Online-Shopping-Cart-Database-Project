@@ -8,7 +8,7 @@ You may find more details about this project at http://www.aaronguan.com/databas
 
 ### Entities
 
-* User (<u>userId</u>, name, phoneNum)
+* User (\_userId, name, phoneNum)
 * Buyer (userId)
 * Seller (userId)
 * Bank Card (cardNumber, userId, bank, expiryDate)
